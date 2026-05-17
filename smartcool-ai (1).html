@@ -1,0 +1,2051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartCool AI – Smarter Cooling. Better Performance.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #03060f;
+  --bg2: #080e1c;
+  --bg3: #0d1628;
+  --accent: #00b4ff;
+  --accent2: #0066cc;
+  --accent3: #00e5ff;
+  --white: #f0f6ff;
+  --muted: #6b7fa3;
+  --border: rgba(0,180,255,0.15);
+  --glow: 0 0 40px rgba(0,180,255,0.25);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--white);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+#cursor {
+  width: 12px; height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease;
+  mix-blend-mode: screen;
+}
+#cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(0,180,255,0.5);
+  border-radius: 50%;
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.35s ease, width 0.3s, height 0.3s;
+}
+
+/* Scroll progress */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent), var(--accent3));
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.1s;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 900;
+  padding: 0 5%;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(3,6,15,0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
+
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--white);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--accent); }
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px; left: 0;
+  width: 0; height: 1px;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-links a:hover::after { width: 100%; }
+
+.nav-cta {
+  background: var(--accent);
+  color: #000 !important;
+  padding: 8px 22px;
+  border-radius: 6px;
+  font-weight: 600 !important;
+  transition: background 0.2s, box-shadow 0.2s !important;
+}
+.nav-cta:hover { background: var(--accent3) !important; box-shadow: var(--glow); }
+.nav-cta::after { display: none !important; }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.hamburger span {
+  display: block; width: 24px; height: 2px;
+  background: var(--white); border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* Mobile nav */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 70px; left: 0; right: 0;
+  background: rgba(3,6,15,0.97);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 5%;
+  z-index: 899;
+  flex-direction: column;
+  gap: 20px;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  color: var(--muted); text-decoration: none;
+  font-size: 16px; font-weight: 500;
+  transition: color 0.2s;
+}
+.mobile-menu a:hover { color: var(--accent); }
+
+/* SECTION COMMON */
+section { padding: 65px 5%; }
+
+.section-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.section-tag::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--accent);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  color: var(--white);
+}
+.section-title span { color: var(--accent); }
+
+.section-sub {
+  font-size: 18px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 600px;
+  margin-top: 16px;
+}
+
+/* HERO */
+#hero {
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  padding-top: 70px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 50%, rgba(0,100,200,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(0,180,255,0.06) 0%, transparent 60%);
+}
+
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,180,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,180,255,0.04) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0,180,255,0.08);
+  border: 1px solid rgba(0,180,255,0.2);
+  border-radius: 30px;
+  padding: 6px 16px;
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+}
+.hero-eyebrow .dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 1.5s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(42px, 6vw, 76px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -2px;
+  color: var(--white);
+  margin-bottom: 24px;
+}
+.hero-title .line2 {
+  background: linear-gradient(135deg, var(--accent), var(--accent3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-desc {
+  font-size: 18px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 480px;
+  margin-bottom: 40px;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: #000;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 32px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s;
+  letter-spacing: 0.5px;
+  border: none; cursor: pointer;
+}
+.btn-primary:hover {
+  background: var(--accent3);
+  box-shadow: 0 0 50px rgba(0,180,255,0.5);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.2);
+  text-decoration: none;
+  transition: all 0.3s;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--border);
+}
+.hero-stat-num {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--accent);
+}
+.hero-stat-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Hero Visual – Fan Dashboard */
+.hero-visual {
+  position: relative;
+  height: 520px;
+}
+
+.dashboard-card {
+  background: linear-gradient(135deg, rgba(13,22,40,0.9), rgba(8,14,28,0.95));
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px;
+  position: absolute;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+
+.main-card {
+  width: 360px;
+  top: 40px;
+  right: 0;
+  animation: float1 6s ease-in-out infinite;
+}
+
+.mini-card {
+  width: 200px;
+  bottom: 60px;
+  left: 0;
+  padding: 20px;
+  animation: float2 5s ease-in-out infinite 1s;
+}
+
+.mini-card2 {
+  width: 180px;
+  top: 0;
+  left: 40px;
+  padding: 18px;
+  animation: float3 7s ease-in-out infinite 0.5s;
+}
+
+@keyframes float1 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+@keyframes float2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+@keyframes float3 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.card-title {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #00ff88;
+  box-shadow: 0 0 8px #00ff88;
+  animation: blink 2s infinite;
+}
+
+/* Circular gauge */
+.gauge-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 8px 0 20px;
+}
+.gauge-svg { width: 140px; height: 140px; }
+.gauge-track { fill: none; stroke: rgba(255,255,255,0.05); stroke-width: 10; }
+.gauge-fill {
+  fill: none;
+  stroke: url(#gaugeGrad);
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 339;
+  stroke-dashoffset: 180;
+  animation: gaugeAnim 3s ease-in-out infinite alternate;
+}
+@keyframes gaugeAnim {
+  from { stroke-dashoffset: 200; }
+  to { stroke-dashoffset: 100; }
+}
+.gauge-value {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  fill: var(--white);
+}
+.gauge-unit {
+  font-size: 14px;
+  fill: var(--muted);
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.bar-label { font-size: 12px; color: var(--muted); width: 50px; }
+.bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  animation: barGrow 2s ease-out forwards;
+}
+@keyframes barGrow { from{width:0} }
+.bar-pct { font-size: 12px; color: var(--accent); width: 32px; text-align: right; }
+
+.mini-num {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1;
+}
+.mini-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.mini-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0,255,136,0.1);
+  color: #00ff88;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 30px;
+  margin-top: 8px;
+}
+
+/* Sparkline */
+.sparkline { margin-top: 12px; }
+.spark-svg { width: 100%; height: 40px; overflow: visible; }
+.spark-line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+}
+.spark-area {
+  fill: url(#sparkGrad);
+  opacity: 0.3;
+}
+
+/* PROBLEM */
+#problem { background: var(--bg2); position: relative; overflow: hidden; }
+#problem::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,180,255,0.04) 0%, transparent 70%);
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.problem-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 28px;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+.problem-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,180,255,0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.problem-card:hover { border-color: rgba(0,180,255,0.4); transform: translateY(-4px); box-shadow: var(--glow); }
+.problem-card:hover::before { opacity: 1; }
+
+.problem-icon {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  background: rgba(0,180,255,0.08);
+  border: 1px solid rgba(0,180,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.problem-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.problem-desc { font-size: 15px; color: var(--muted); line-height: 1.6; }
+
+/* SOLUTION */
+#solution { position: relative; }
+
+.solution-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.solution-visual {
+  position: relative;
+  height: 480px;
+}
+
+.ai-brain-card {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--bg3), var(--bg2));
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.brain-rings {
+  position: relative;
+  width: 260px; height: 260px;
+  display: flex; align-items: center; justify-content: center;
+}
+.brain-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(0,180,255,0.15);
+  animation: ringRotate linear infinite;
+}
+.brain-ring:nth-child(1) { width: 100%; height: 100%; animation-duration: 20s; }
+.brain-ring:nth-child(2) { width: 75%; height: 75%; animation-duration: 14s; animation-direction: reverse; border-color: rgba(0,180,255,0.25); }
+.brain-ring:nth-child(3) { width: 50%; height: 50%; animation-duration: 10s; border-color: rgba(0,180,255,0.4); }
+
+.ring-dot {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent);
+  top: -4px; left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes ringRotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+.brain-center {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+  box-shadow: 0 0 60px rgba(0,180,255,0.4);
+  z-index: 2;
+  animation: breathe 3s ease-in-out infinite;
+}
+@keyframes breathe { 0%,100%{box-shadow:0 0 40px rgba(0,180,255,0.4)} 50%{box-shadow:0 0 80px rgba(0,180,255,0.7)} }
+
+.solution-steps {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px 24px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: all 0.3s;
+}
+.step:hover { border-color: rgba(0,180,255,0.35); transform: translateX(6px); }
+
+.step-num {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  color: #000;
+  flex-shrink: 0;
+}
+.step-text-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.step-text-desc { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+/* FEATURES */
+#features { background: var(--bg2); }
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+  max-width: 1200px;
+  margin-left: auto; margin-right: auto;
+}
+
+.feat-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 36px 30px;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+  group: '';
+}
+.feat-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  transform: scaleX(0);
+  transition: transform 0.4s;
+}
+.feat-card:hover { transform: translateY(-6px); border-color: rgba(0,180,255,0.35); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+.feat-card:hover::after { transform: scaleX(1); }
+
+.feat-icon {
+  font-size: 42px;
+  margin-bottom: 20px;
+  display: block;
+}
+.feat-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.feat-desc { font-size: 15px; color: var(--muted); line-height: 1.65; }
+
+/* USERS */
+#users { position: relative; }
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin-top: 60px;
+  max-width: 1200px;
+  margin-left: auto; margin-right: auto;
+}
+
+.user-card {
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  transition: all 0.4s;
+  cursor: default;
+}
+.user-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent3));
+  transform: scaleX(0);
+  transition: transform 0.4s;
+}
+.user-card:hover { transform: translateY(-6px); border-color: rgba(0,180,255,0.3); }
+.user-card:hover::before { transform: scaleX(1); }
+
+.user-emoji { font-size: 52px; margin-bottom: 16px; display: block; }
+.user-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.user-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+.user-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 16px;
+}
+.tag {
+  background: rgba(0,180,255,0.08);
+  border: 1px solid rgba(0,180,255,0.2);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 30px;
+  letter-spacing: 0.5px;
+}
+
+/* PRODUCT PREVIEW */
+#preview { background: var(--bg2); }
+
+.preview-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.preview-dashboard {
+  margin-top: 60px;
+  background: linear-gradient(135deg, var(--bg3), var(--bg2));
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.preview-dashboard::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,180,255,0.08) 0%, transparent 70%);
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+.preview-dot { width: 12px; height: 12px; border-radius: 50%; }
+.preview-dot:nth-child(1) { background: #ff5f57; }
+.preview-dot:nth-child(2) { background: #febc2e; }
+.preview-dot:nth-child(3) { background: #28c840; }
+
+.preview-title-bar {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border-radius: 6px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.dash-metric {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.dash-metric-label { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.dash-metric-value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 800;
+}
+.dash-metric-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.val-blue { color: var(--accent); }
+.val-green { color: #00ff88; }
+.val-orange { color: #ff9f43; }
+.val-white { color: var(--white); }
+
+.chart-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+.chart-box {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+.chart-box-title { font-size: 13px; color: var(--muted); margin-bottom: 16px; font-weight: 500; }
+
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  height: 100px;
+}
+.cbar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(to top, var(--accent2), var(--accent));
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  animation: barRise 1.5s ease-out forwards;
+}
+.cbar:nth-child(2) { animation-delay: 0.1s; }
+.cbar:nth-child(3) { animation-delay: 0.2s; }
+.cbar:nth-child(4) { animation-delay: 0.3s; }
+.cbar:nth-child(5) { animation-delay: 0.4s; }
+.cbar:nth-child(6) { animation-delay: 0.5s; }
+.cbar:nth-child(7) { animation-delay: 0.6s; }
+@keyframes barRise { from{transform:scaleY(0); transform-origin:bottom} to{transform:scaleY(1); transform-origin:bottom} }
+.cbar:hover { opacity: 1; }
+
+.donut-wrap { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 12px; height: 100px; }
+.donut-svg { width: 80px; height: 80px; }
+.donut-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 12; }
+.donut-val {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 12;
+  stroke-linecap: round;
+  stroke-dasharray: 201;
+  stroke-dashoffset: 50;
+  transform: rotate(-90deg);
+  transform-origin: 40px 40px;
+}
+.donut-label { font-size: 12px; color: var(--muted); text-align: center; }
+
+/* BENEFITS */
+#benefits { position: relative; }
+
+.benefits-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.benefit-list { margin-top: 40px; display: flex; flex-direction: column; gap: 20px; }
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 24px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: all 0.3s;
+}
+.benefit-item:hover { border-color: rgba(0,180,255,0.35); transform: translateX(4px); }
+
+.benefit-icon {
+  font-size: 28px;
+  width: 52px; height: 52px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,180,255,0.08);
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+.benefit-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.benefit-desc { font-size: 14px; color: var(--muted); }
+
+.benefits-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.benefit-bar-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+}
+.bbar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+.bbar-label span:first-child { color: var(--muted); }
+.bbar-label span:last-child { color: var(--accent); font-weight: 600; }
+.bbar-track {
+  height: 8px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.bbar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent3));
+  animation: bbarGrow 2s ease-out forwards;
+}
+.bbar-before {
+  height: 100%;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.15);
+  animation: bbarGrow 2s ease-out forwards;
+}
+@keyframes bbarGrow { from{width:0} }
+
+/* ABOUT */
+#about { background: var(--bg2); }
+
+.about-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.about-text { }
+.about-mission {
+  font-size: 20px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 20px;
+}
+.about-mission strong { color: var(--white); font-weight: 500; }
+
+.about-values {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 36px;
+}
+.value-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  color: var(--muted);
+}
+.value-item::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.about-visual {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 40px;
+  text-align: center;
+}
+.about-logo-big {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -2px;
+  margin-bottom: 8px;
+}
+.about-logo-big span { color: var(--accent); }
+.about-tagline { font-size: 16px; color: var(--muted); font-style: italic; }
+
+.about-numbers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 32px;
+}
+.about-num {
+  background: rgba(0,180,255,0.06);
+  border: 1px solid rgba(0,180,255,0.12);
+  border-radius: 14px;
+  padding: 20px;
+}
+.about-num-value {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--accent);
+}
+.about-num-label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+/* CONTACT */
+#contact { position: relative; overflow: hidden; }
+#contact::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: 50%;
+  transform: translateX(-50%);
+  width: 800px; height: 800px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,100,200,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.contact-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.contact-info { }
+.contact-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-top: 32px;
+  padding: 20px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: all 0.3s;
+}
+.contact-detail:hover { border-color: rgba(0,180,255,0.3); }
+.contact-detail-icon { font-size: 24px; }
+.contact-detail-label { font-size: 12px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.contact-detail-value { font-size: 15px; color: var(--white); margin-top: 2px; }
+
+.social-row { display: flex; gap: 12px; margin-top: 32px; }
+.social-btn {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  text-decoration: none;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+.social-btn:hover { border-color: var(--accent); background: rgba(0,180,255,0.1); transform: translateY(-3px); }
+
+.contact-form { }
+.form-group { margin-bottom: 20px; }
+.form-label {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.form-input, .form-textarea {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--white);
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-input:focus, .form-textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,180,255,0.1);
+}
+.form-input::placeholder, .form-textarea::placeholder { color: rgba(107,127,163,0.5); }
+.form-textarea { resize: vertical; min-height: 120px; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+.form-submit {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  color: #000;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.3s;
+}
+.form-submit:hover { box-shadow: 0 0 50px rgba(0,180,255,0.4); transform: translateY(-2px); }
+
+/* FOOTER */
+footer {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  padding: 60px 5% 30px;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-brand .nav-logo { font-size: 24px; }
+.footer-brand p { font-size: 14px; color: var(--muted); line-height: 1.7; margin-top: 12px; max-width: 260px; }
+
+.footer-col h4 {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--white);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+.footer-col a {
+  display: block;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 10px;
+  transition: color 0.2s;
+}
+.footer-col a:hover { color: var(--accent); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.footer-copy { font-size: 13px; color: var(--muted); }
+.footer-copy span { color: var(--accent); }
+
+/* ANIMATIONS */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* Stagger delays */
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
+.delay-4 { transition-delay: 0.4s; }
+.delay-5 { transition-delay: 0.5s; }
+
+/* TEAM */
+.team-section {
+  margin-top: 48px;
+  padding-top: 36px;
+  border-top: 1px solid var(--border);
+}
+.team-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.team-label::before { content:''; width:20px; height:1px; background:var(--accent); }
+
+.team-list { display: flex; flex-direction: column; gap: 12px; }
+
+.team-member {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+.team-member:hover { border-color: rgba(0,180,255,0.4); transform: translateX(6px); }
+
+.team-avatar {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent2), var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  color: #000;
+  flex-shrink: 0;
+}
+.team-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+}
+.team-role {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.team-num {
+  margin-left: auto;
+  font-family: var(--font-display);
+  font-size: 13px;
+  color: rgba(0,180,255,0.4);
+  font-weight: 700;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .hero-inner, .solution-inner, .benefits-inner, .about-inner, .contact-inner { grid-template-columns: 1fr; }
+  .hero-visual, .solution-visual { height: 320px; }
+  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+  .chart-row { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  .hero-stats { gap: 20px; }
+}
+
+@media (max-width: 600px) {
+  section { padding: 70px 5%; }
+  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .hero-btns { flex-direction: column; }
+  .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+}
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 30px; right: 30px;
+  background: var(--bg3);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 14px;
+  color: var(--white);
+  display: flex; align-items: center; gap: 10px;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.4s;
+  z-index: 9999;
+  box-shadow: 0 0 40px rgba(0,180,255,0.3);
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Progress bar -->
+<div id="progress-bar"></div>
+
+<!-- Toast -->
+<div class="toast" id="toast">✅ Message sent! We'll get back to you soon.</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Smart<span>Cool</span> AI</a>
+  <ul class="nav-links">
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#solution">Solution</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#users">Users</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#problem" onclick="closeMobile()">Problem</a>
+  <a href="#solution" onclick="closeMobile()">Solution</a>
+  <a href="#features" onclick="closeMobile()">Features</a>
+  <a href="#users" onclick="closeMobile()">Target Users</a>
+  <a href="#preview" onclick="closeMobile()">Product</a>
+  <a href="#about" onclick="closeMobile()">About</a>
+  <a href="#contact" onclick="closeMobile()">Contact</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="dot"></span>
+        AI-Powered Cooling Technology
+      </div>
+      <h1 class="hero-title">
+        Smarter<br>
+        <span class="line2">Cooling.</span><br>
+        Better Performance.
+      </h1>
+      <p class="hero-desc">
+        SmartCool AI eliminates overheating, silences noisy fans, and slashes energy waste — using intelligent AI that learns your PC's behavior and optimizes cooling in real time.
+      </p>
+      <div class="hero-btns">
+        <a href="#preview" class="btn-primary">🎯 Get Demo</a>
+        <a href="#contact" class="btn-outline">📩 Contact Us</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">40%</div>
+          <div class="hero-stat-label">Cooler temps</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">60%</div>
+          <div class="hero-stat-label">Less noise</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">35%</div>
+          <div class="hero-stat-label">Energy saved</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <!-- Mini card top-left -->
+      <div class="dashboard-card mini-card2">
+        <div class="card-header">
+          <span class="card-title">AI Status</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="mini-num" style="color:#00ff88">ON</div>
+        <div class="mini-label">Learning mode active</div>
+        <div class="mini-badge">▲ Optimizing</div>
+      </div>
+
+      <!-- Main card -->
+      <div class="dashboard-card main-card">
+        <div class="card-header">
+          <span class="card-title">Fan Controller</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="gauge-wrap">
+          <svg class="gauge-svg" viewBox="0 0 120 120">
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#0066cc"/>
+                <stop offset="100%" stop-color="#00e5ff"/>
+              </linearGradient>
+            </defs>
+            <circle class="gauge-track" cx="60" cy="60" r="54"/>
+            <circle class="gauge-fill" cx="60" cy="60" r="54" transform="rotate(-90 60 60)"/>
+            <text class="gauge-value" x="60" y="55" text-anchor="middle" font-family="Syne,sans-serif">62°</text>
+            <text class="gauge-unit" x="60" y="72" text-anchor="middle" font-family="DM Sans,sans-serif">CPU Temp</text>
+          </svg>
+        </div>
+        <div class="bar-row"><span class="bar-label" style="font-size:11px;color:var(--muted)">CPU</span><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div><span class="bar-pct">72%</span></div>
+        <div class="bar-row"><span class="bar-label" style="font-size:11px;color:var(--muted)">GPU</span><div class="bar-track"><div class="bar-fill" style="width:55%"></div></div><span class="bar-pct">55%</span></div>
+        <div class="bar-row"><span class="bar-label" style="font-size:11px;color:var(--muted)">FAN</span><div class="bar-track"><div class="bar-fill" style="width:40%"></div></div><span class="bar-pct">40%</span></div>
+      </div>
+
+      <!-- Bottom mini card -->
+      <div class="dashboard-card mini-card">
+        <div class="card-title" style="margin-bottom:10px">Noise Level</div>
+        <div class="mini-num">28<span style="font-size:16px;color:var(--muted)">dB</span></div>
+        <div class="mini-label">Near silent</div>
+        <div class="sparkline">
+          <svg class="spark-svg" viewBox="0 0 160 40" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="sparkGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#00b4ff"/>
+                <stop offset="100%" stop-color="transparent"/>
+              </linearGradient>
+            </defs>
+            <path class="spark-area" d="M0 35 Q20 30 40 20 Q60 10 80 15 Q100 20 120 12 Q140 5 160 8 L160 40 L0 40 Z"/>
+            <path class="spark-line" d="M0 35 Q20 30 40 20 Q60 10 80 15 Q100 20 120 12 Q140 5 160 8"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal">
+      <div class="section-tag">The Problem</div>
+      <h2 class="section-title">Your PC is fighting <span>against you</span></h2>
+      <p class="section-sub">Traditional cooling systems are reactive, noisy, and wasteful. They can't think — and that costs you.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card reveal delay-1">
+        <div class="problem-icon">🔥</div>
+        <div class="problem-title">PC Overheating</div>
+        <p class="problem-desc">High temps throttle your CPU and GPU, causing lag, crashes, and reduced lifespan. Your hardware is suffering silently.</p>
+      </div>
+      <div class="problem-card reveal delay-2">
+        <div class="problem-icon">📢</div>
+        <div class="problem-title">Loud Fan Noise</div>
+        <p class="problem-desc">Fans spinning at full speed unnecessarily creates distracting noise — during calls, studying, or gaming sessions.</p>
+      </div>
+      <div class="problem-card reveal delay-3">
+        <div class="problem-icon">⚡</div>
+        <div class="problem-title">High Power Consumption</div>
+        <p class="problem-desc">Inefficient cooling wastes electricity. Fans running at max speed burn power even when your system is idling.</p>
+      </div>
+      <div class="problem-card reveal delay-4">
+        <div class="problem-icon">💔</div>
+        <div class="problem-title">Reduced Hardware Lifespan</div>
+        <p class="problem-desc">Constant thermal stress degrades components faster — costing you repairs and early replacements you shouldn't need.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <div class="solution-inner">
+    <div class="solution-visual reveal-left">
+      <div class="ai-brain-card">
+        <div class="brain-rings">
+          <div class="brain-ring"><div class="ring-dot"></div></div>
+          <div class="brain-ring"><div class="ring-dot"></div></div>
+          <div class="brain-ring"><div class="ring-dot"></div></div>
+          <div class="brain-center">🧠</div>
+        </div>
+        <div style="margin-top:24px;text-align:center;padding:0 30px">
+          <div style="font-family:var(--font-display);font-size:20px;font-weight:800;margin-bottom:6px">AI Engine v2.4</div>
+          <div style="font-size:13px;color:var(--muted)">Continuously learning & optimizing</div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal-right">
+      <div class="section-tag">Our Solution</div>
+      <h2 class="section-title">AI that actually <span>thinks</span> about cooling</h2>
+      <p class="section-sub">SmartCool AI learns how you use your PC and dynamically adjusts fan speed — before you even feel the heat.</p>
+      <div class="solution-steps">
+        <div class="step delay-1">
+          <div class="step-num">01</div>
+          <div>
+            <div class="step-text-title">Sense & Monitor</div>
+            <div class="step-text-desc">Real-time temperature sensors track CPU, GPU, and motherboard zones continuously.</div>
+          </div>
+        </div>
+        <div class="step delay-2">
+          <div class="step-num">02</div>
+          <div>
+            <div class="step-text-title">AI Learns Patterns</div>
+            <div class="step-text-desc">Machine learning models identify your usage habits — gaming bursts, idle periods, video rendering cycles.</div>
+          </div>
+        </div>
+        <div class="step delay-3">
+          <div class="step-num">03</div>
+          <div>
+            <div class="step-text-title">Predict & Optimize</div>
+            <div class="step-text-desc">Fans adjust proactively — cooling ramps up before temps spike, not after. Smart and silent.</div>
+          </div>
+        </div>
+        <div class="step delay-4">
+          <div class="step-num">04</div>
+          <div>
+            <div class="step-text-title">Improve Over Time</div>
+            <div class="step-text-desc">The more you use it, the smarter it gets. Personalized cooling that evolves with your workflow.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal" style="text-align:center;margin-bottom:0">
+      <div class="section-tag" style="justify-content:center">Features</div>
+      <h2 class="section-title" style="text-align:center">Everything you need.<br><span>Nothing you don't.</span></h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card reveal delay-1">
+        <span class="feat-icon">🤖</span>
+        <div class="feat-title">AI-Powered Cooling</div>
+        <p class="feat-desc">Adaptive algorithms analyze thermal patterns and auto-adjust fan curves in real time — no manual tuning needed.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <span class="feat-icon">🤫</span>
+        <div class="feat-title">Quiet Performance</div>
+        <p class="feat-desc">Fans only spin as fast as needed. Enjoy near-silent operation during low-load tasks without sacrificing cooling.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <span class="feat-icon">🌿</span>
+        <div class="feat-title">Energy Efficiency</div>
+        <p class="feat-desc">Intelligent fan control reduces unnecessary power draw — saving electricity and lowering your energy bill.</p>
+      </div>
+      <div class="feat-card reveal delay-1">
+        <span class="feat-icon">📊</span>
+        <div class="feat-title">Real-Time Monitoring</div>
+        <p class="feat-desc">Live dashboard shows CPU/GPU temps, fan RPMs, noise levels, and energy usage at a glance.</p>
+      </div>
+      <div class="feat-card reveal delay-2">
+        <span class="feat-icon">🛡️</span>
+        <div class="feat-title">Hardware Protection</div>
+        <p class="feat-desc">Consistent optimal temperatures extend component life — protecting your GPU, CPU, and storage from thermal wear.</p>
+      </div>
+      <div class="feat-card reveal delay-3">
+        <span class="feat-icon">💰</span>
+        <div class="feat-title">Affordable Solution</div>
+        <p class="feat-desc">Premium AI cooling at an accessible price. Fraction of the cost of aftermarket coolers — with smarter results.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USERS -->
+<section id="users">
+  <div style="max-width:1200px;margin:0 auto">
+    <div class="reveal" style="text-align:center">
+      <div class="section-tag" style="justify-content:center">Who It's For</div>
+      <h2 class="section-title" style="text-align:center">Built for <span>every PC user</span></h2>
+      <p class="section-sub" style="margin:16px auto 0;text-align:center">Whether you push your machine hard or need it quiet, SmartCool AI adapts to you.</p>
+    </div>
+    <div class="users-grid">
+      <div class="user-card reveal delay-1">
+        <span class="user-emoji">🎮</span>
+        <div class="user-name">Gamers</div>
+        <p class="user-desc">Max fps without throttling. SmartCool keeps your rig cool during marathon sessions and peak GPU loads.</p>
+        <div class="user-tags"><span class="tag">Performance</span><span class="tag">No Throttle</span></div>
+      </div>
+      <div class="user-card reveal delay-2">
+        <span class="user-emoji">🎓</span>
+        <div class="user-name">Students</div>
+        <p class="user-desc">Study without distracting fan noise. Silent operation during classes, video calls, and late-night coding sessions.</p>
+        <div class="user-tags"><span class="tag">Silent</span><span class="tag">Efficient</span></div>
+      </div>
+      <div class="user-card reveal delay-3">
+        <span class="user-emoji">💼</span>
+        <div class="user-name">Professionals</div>
+        <p class="user-desc">Sustained performance for rendering, compiling, and multitasking without thermal throttling slowing your workflow.</p>
+        <div class="user-tags"><span class="tag">Sustained Load</span><span class="tag">Reliable</span></div>
+      </div>
+      <div class="user-card reveal delay-4">
+        <span class="user-emoji">⚙️</span>
+        <div class="user-name">PC Enthusiasts</div>
+        <p class="user-desc">Granular control meets AI intelligence. Override, tweak, and monitor every aspect of your cooling setup.</p>
+        <div class="user-tags"><span class="tag">Customizable</span><span class="tag">Detailed</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT PREVIEW -->
+<section id="preview">
+  <div class="preview-inner">
+    <div class="reveal" style="text-align:center">
+      <div class="section-tag" style="justify-content:center">Product Preview</div>
+      <h2 class="section-title" style="text-align:center">Control at a <span>glance</span></h2>
+      <p class="section-sub" style="margin:16px auto 0;text-align:center;max-width:500px">A beautifully designed dashboard that puts all your system's thermal data in one intelligent view.</p>
+    </div>
+    <div class="preview-dashboard reveal">
+      <div class="preview-header">
+        <div class="preview-dot"></div>
+        <div class="preview-dot"></div>
+        <div class="preview-dot"></div>
+        <div class="preview-title-bar">SmartCool AI Dashboard v2.4 — smartcool.local</div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="dash-metric">
+          <div class="dash-metric-label">CPU Temp</div>
+          <div class="dash-metric-value val-green">62°C</div>
+          <div class="dash-metric-sub">↓ 18° vs before</div>
+        </div>
+        <div class="dash-metric">
+          <div class="dash-metric-label">Fan Speed</div>
+          <div class="dash-metric-value val-blue">1,240 <span style="font-size:14px">RPM</span></div>
+          <div class="dash-metric-sub">Optimized by AI</div>
+        </div>
+        <div class="dash-metric">
+          <div class="dash-metric-label">Noise Level</div>
+          <div class="dash-metric-value val-white">28 <span style="font-size:14px">dB</span></div>
+          <div class="dash-metric-sub">Near silent</div>
+        </div>
+        <div class="dash-metric">
+          <div class="dash-metric-label">Power Saved</div>
+          <div class="dash-metric-value val-orange">35%</div>
+          <div class="dash-metric-sub">vs auto mode</div>
+        </div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-box">
+          <div class="chart-box-title">Temperature over time (last 7 sessions)</div>
+          <div class="chart-bars">
+            <div class="cbar" style="height:75%"></div>
+            <div class="cbar" style="height:82%"></div>
+            <div class="cbar" style="height:60%"></div>
+            <div class="cbar" style="height:70%"></div>
+            <div class="cbar" style="height:55%"></div>
+            <div class="cbar" style="height:48%"></div>
+            <div class="cbar" style="height:42%"></div>
+          </div>
+        </div>
+        <div class="chart-box">
+          <div class="chart-box-title">Energy efficiency</div>
+          <div class="donut-wrap">
+            <svg class="donut-svg" viewBox="0 0 80 80">
+              <circle class="donut-track" cx="40" cy="40" r="32"/>
+              <circle class="donut-val" cx="40" cy="40" r="32"/>
+              <text x="40" y="44" text-anchor="middle" font-family="Syne,sans-serif" font-size="14" font-weight="800" fill="#00b4ff">75%</text>
+            </svg>
+            <div class="donut-label">AI efficiency<br>score</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="benefits-inner">
+    <div class="reveal-left">
+      <div class="section-tag">Benefits</div>
+      <h2 class="section-title">Real results,<br><span>measurable impact</span></h2>
+      <p class="section-sub">Don't take our word for it — the numbers speak for themselves.</p>
+      <div class="benefit-list">
+        <div class="benefit-item">
+          <div class="benefit-icon">🌡️</div>
+          <div>
+            <div class="benefit-title">Up to 40% lower temperatures</div>
+            <div class="benefit-desc">AI-optimized airflow consistently keeps your CPU and GPU well within safe zones.</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🔇</div>
+          <div>
+            <div class="benefit-title">60% reduction in fan noise</div>
+            <div class="benefit-desc">Smart speed curves mean fans only spin hard when truly necessary.</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">⚡</div>
+          <div>
+            <div class="benefit-title">35% energy savings</div>
+            <div class="benefit-desc">Efficient cooling draws less power, reducing your electricity costs over time.</div>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🏆</div>
+          <div>
+            <div class="benefit-title">2× longer hardware lifespan</div>
+            <div class="benefit-desc">Consistent thermal management dramatically reduces component degradation.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="benefits-visual reveal-right">
+      <div class="benefit-bar-card">
+        <div class="bbar-label"><span>Temperature (Before)</span><span>82°C avg</span></div>
+        <div class="bbar-track"><div class="bbar-before" style="width:82%"></div></div>
+        <div class="bbar-label" style="margin-top:12px"><span>Temperature (After)</span><span style="color:#00ff88">49°C avg</span></div>
+        <div class="bbar-track"><div class="bbar-fill" style="width:49%"></div></div>
+      </div>
+      <div class="benefit-bar-card">
+        <div class="bbar-label"><span>Fan Noise (Before)</span><span>72 dB</span></div>
+        <div class="bbar-track"><div class="bbar-before" style="width:72%"></div></div>
+        <div class="bbar-label" style="margin-top:12px"><span>Fan Noise (After)</span><span style="color:#00ff88">28 dB</span></div>
+        <div class="bbar-track"><div class="bbar-fill" style="width:28%"></div></div>
+      </div>
+      <div class="benefit-bar-card">
+        <div class="bbar-label"><span>Power Usage (Before)</span><span>180W</span></div>
+        <div class="bbar-track"><div class="bbar-before" style="width:90%"></div></div>
+        <div class="bbar-label" style="margin-top:12px"><span>Power Usage (After)</span><span style="color:#00ff88">117W</span></div>
+        <div class="bbar-track"><div class="bbar-fill" style="width:58%"></div></div>
+      </div>
+      <div class="benefit-bar-card">
+        <div class="bbar-label"><span>Performance Score</span><span style="color:#00ff88">+28% uplift</span></div>
+        <div class="bbar-track"><div class="bbar-fill" style="width:88%"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-inner">
+    <div class="reveal-left">
+      <div class="section-tag">About Us</div>
+      <h2 class="section-title">We're building the <span>future</span> of cooling</h2>
+      <p class="about-mission">
+        <strong>SmartCool AI</strong> was founded with a single belief: that computers deserve better cooling than a dumb PWM curve. We combine <strong>embedded systems engineering</strong> with <strong>machine learning</strong> to create adaptive cooling solutions that genuinely understand your hardware.
+      </p>
+      <p class="about-mission" style="margin-top:16px">
+        Our mission is to make <strong>intelligent, sustainable cooling</strong> accessible to every PC user — from budget builds to high-end workstations.
+      </p>
+      <div class="about-values">
+        <div class="value-item">AI-first engineering philosophy</div>
+        <div class="value-item">Sustainability & energy efficiency</div>
+        <div class="value-item">Accessible pricing for all users</div>
+        <div class="value-item">Privacy-first, on-device AI processing</div>
+      </div>
+
+      <!-- Team Members -->
+      <div class="team-section reveal">
+        <div class="team-label">Our Team</div>
+        <div class="team-list">
+          <div class="team-member">
+            <div class="team-avatar">MM</div>
+            <div>
+              <div class="team-name">Mohamed Meeran.M</div>
+              <div class="team-role">Co-Founder &amp; AI Engineer</div>
+            </div>
+            <div class="team-num">01</div>
+          </div>
+          <div class="team-member">
+            <div class="team-avatar">MR</div>
+            <div>
+              <div class="team-name">Mohamed Rifaai.N</div>
+              <div class="team-role">Co-Founder &amp; Hardware Lead</div>
+            </div>
+            <div class="team-num">02</div>
+          </div>
+          <div class="team-member">
+            <div class="team-avatar">NB</div>
+            <div>
+              <div class="team-name">Noorul Bahrudeen</div>
+              <div class="team-role">Co-Founder &amp; Systems Architect</div>
+            </div>
+            <div class="team-num">03</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal-right">
+      <div class="about-visual">
+        <div class="about-logo-big">Smart<span>Cool</span><br>AI</div>
+        <div class="about-tagline">"Cooling intelligence, engineered for you."</div>
+        <div class="about-numbers">
+          <div class="about-num">
+            <div class="about-num-value">500+</div>
+            <div class="about-num-label">Beta testers</div>
+          </div>
+          <div class="about-num">
+            <div class="about-num-value">3</div>
+            <div class="about-num-label">Patents filed</div>
+          </div>
+          <div class="about-num">
+            <div class="about-num-value">98%</div>
+            <div class="about-num-label">Satisfaction rate</div>
+          </div>
+          <div class="about-num">
+            <div class="about-num-value">2024</div>
+            <div class="about-num-label">Founded</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="reveal-left">
+      <div class="section-tag">Get In Touch</div>
+      <h2 class="section-title">Let's talk<br><span>cooling.</span></h2>
+      <p class="section-sub">Have questions, want a demo, or ready to partner? We'd love to hear from you.</p>
+
+      <div class="contact-detail">
+        <span class="contact-detail-icon">📧</span>
+        <div>
+          <div class="contact-detail-label">Email</div>
+          <div class="contact-detail-value">hello@smartcool.ai</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-icon">📞</span>
+        <div>
+          <div class="contact-detail-label">Phone</div>
+          <div class="contact-detail-value">+91 98765 43210</div>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <span class="contact-detail-icon">📍</span>
+        <div>
+          <div class="contact-detail-label">Location</div>
+          <div class="contact-detail-value">Chennai, Tamil Nadu, India</div>
+        </div>
+      </div>
+
+      <div class="social-row">
+        <a class="social-btn" title="Twitter/X">𝕏</a>
+        <a class="social-btn" title="LinkedIn">in</a>
+        <a class="social-btn" title="GitHub">⌥</a>
+        <a class="social-btn" title="Instagram">📸</a>
+        <a class="social-btn" title="YouTube">▶</a>
+      </div>
+    </div>
+
+    <div class="contact-form reveal-right">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input type="text" class="form-input" placeholder="John" id="fname">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input type="text" class="form-input" placeholder="Doe" id="lname">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" placeholder="john@example.com" id="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <input type="text" class="form-input" placeholder="I'd like a demo of SmartCool AI" id="subject">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" placeholder="Tell us about your PC setup and what you're looking for..." id="message"></textarea>
+      </div>
+      <button class="form-submit" onclick="submitForm()">Send Message →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="#hero" class="nav-logo">Smart<span>Cool</span> AI</a>
+      <p>Intelligent cooling technology that learns, adapts, and protects — making your PC run smarter, quieter, and longer.</p>
+      <div class="social-row" style="margin-top:20px">
+        <a class="social-btn" style="width:36px;height:36px;font-size:16px">𝕏</a>
+        <a class="social-btn" style="width:36px;height:36px;font-size:16px">in</a>
+        <a class="social-btn" style="width:36px;height:36px;font-size:16px">⌥</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <a href="#features">Features</a>
+      <a href="#preview">Dashboard</a>
+      <a href="#benefits">Benefits</a>
+      <a href="#contact">Get Demo</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#about">About Us</a>
+      <a href="#users">Who It's For</a>
+      <a href="#solution">How It Works</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="#">Documentation</a>
+      <a href="#">FAQ</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Use</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 <span>SmartCool AI</span>. All rights reserved. Made with ❤️ in Chennai, India.</div>
+    <div class="footer-copy">Built for smarter, cooler computing.</div>
+  </div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function animateCursor() {
+  rx += (mx - rx) * 0.15;
+  ry += (my - ry) * 0.15;
+  cursor.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+  ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+document.querySelectorAll('a, button, .feat-card, .problem-card, .user-card').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform += ' scale(2)';
+    ring.style.width = '52px'; ring.style.height = '52px';
+  });
+  el.addEventListener('mouseleave', () => {
+    ring.style.width = '36px'; ring.style.height = '36px';
+  });
+});
+
+// Scroll progress
+const bar = document.getElementById('progress-bar');
+window.addEventListener('scroll', () => {
+  const pct = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+  bar.style.width = pct + '%';
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// Hamburger
+const ham = document.getElementById('hamburger');
+const mob = document.getElementById('mobile-menu');
+ham.addEventListener('click', () => mob.classList.toggle('open'));
+function closeMobile() { mob.classList.remove('open'); }
+
+// Contact form
+function submitForm() {
+  const fname = document.getElementById('fname').value;
+  const email = document.getElementById('email').value;
+  if (!fname || !email) { alert('Please fill in your name and email.'); return; }
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+  ['fname','lname','email','subject','message'].forEach(id => document.getElementById(id).value = '');
+}
+
+// Smooth active nav
+window.addEventListener('scroll', () => {
+  const sections = ['hero','problem','solution','features','users','preview','benefits','about','contact'];
+  const scrollY = window.scrollY + 100;
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const top = el.offsetTop, h = el.offsetHeight;
+    const links = document.querySelectorAll(`.nav-links a[href="#${id}"]`);
+    links.forEach(l => scrollY >= top && scrollY < top + h ? l.style.color = '#00b4ff' : l.style.color = '');
+  });
+});
+</script>
+</body>
+</html>
